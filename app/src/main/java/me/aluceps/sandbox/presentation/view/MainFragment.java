@@ -62,6 +62,7 @@ public class MainFragment extends BaseFragment implements MainContruct.View {
 
     @Override
     protected void initPresenter() {
+        getComponent().inject(this);
         presenter.setView(this);
     }
 
