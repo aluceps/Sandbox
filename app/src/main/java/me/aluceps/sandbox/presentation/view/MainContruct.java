@@ -7,8 +7,6 @@ public class MainContruct {
 
     public interface View extends BaseView {
 
-        void show();
-
         void increment(int value);
     }
 
