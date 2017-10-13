@@ -15,6 +15,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         replaceFragment(binding.container.getId(), MainFragment.newInstance());
     }

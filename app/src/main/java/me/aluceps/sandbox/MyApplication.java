@@ -19,9 +19,10 @@ public class MyApplication extends Application {
     }
 
     private void initializeInjector() {
-        this.appComponent = DaggerAppComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
+        appComponent.inject(this);
     }
 
     private void initializeDebug() {
@@ -30,7 +31,7 @@ public class MyApplication extends Application {
         }
     }
 
-    public AppComponent getAppComponent() {
-        return this.appComponent;
+    public AppComponent getComponent() {
+        return appComponent;
     }
 }

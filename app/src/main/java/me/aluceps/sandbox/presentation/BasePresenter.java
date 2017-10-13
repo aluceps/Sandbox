@@ -1,6 +1,8 @@
 package me.aluceps.sandbox.presentation;
 
+import android.support.annotation.NonNull;
+
 public interface BasePresenter<T> {
 
-    void setView(T view);
+    void setView(@NonNull T view);
 }
