@@ -13,15 +13,19 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
 
     private MainContract.View view;
 
+    private RetrofitManager retrofitManager;
+
     @Override
     public void setView(MainContract.View view) {
         this.view = view;
     }
 
     @Override
-    public void load() {
-        RetrofitManager manager = new RetrofitManager();
-        manager.events()
+    public void load(final boolean isRefresh) {
+        view.clear();
+        view.showProgressBar(isRefresh);
+        retrofitManager = new RetrofitManager();
+        retrofitManager.events()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ConnpassEvent>() {
@@ -33,6 +37,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
                     @Override
                     public void onSuccess(@NonNull ConnpassEvent connpassEvent) {
                         Timber.d("onSuccess");
+                        view.hideProgressBar(isRefresh);
                         view.setEvents(connpassEvent.getEvents());
                     }
 

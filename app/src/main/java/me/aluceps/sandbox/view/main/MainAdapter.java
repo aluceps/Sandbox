@@ -43,4 +43,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewModel> {
         Timber.d("set: " + events.size());
         this.events.addAll(events);
     }
+
+    public void clear() {
+        events.clear();
+    }
 }

@@ -2,6 +2,7 @@ package me.aluceps.sandbox.view.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import io.reactivex.disposables.CompositeDisposable;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.view.BaseFragment;
@@ -18,8 +18,6 @@ import timber.log.Timber;
 public class MainFragment extends BaseFragment implements MainContract.View {
 
     private FragmentMainBinding binding;
-
-    private CompositeDisposable disposable = new CompositeDisposable();
 
     private MainPresenter presenter;
 
@@ -46,19 +44,11 @@ public class MainFragment extends BaseFragment implements MainContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeRecyclerView();
-        binding.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.load();
-            }
-        });
+        presenter.load(false);
     }
 
     @Override
     public void onDestroy() {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
         super.onDestroy();
     }
 
@@ -74,6 +64,12 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         Timber.d("initializeRecyclerView");
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(getAdapter());
+        binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.load(true);
+            }
+        });
     }
 
     @Override
@@ -88,5 +84,27 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         Timber.d("setEvents");
         adapter.set(events);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clear() {
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showProgressBar(boolean isRefresh) {
+        if (!isRefresh) {
+            binding.progressbar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideProgressBar(boolean isRefresh) {
+        if (isRefresh) {
+            binding.swiperefresh.setRefreshing(false);
+        } else {
+            binding.progressbar.setVisibility(View.GONE);
+        }
     }
 }

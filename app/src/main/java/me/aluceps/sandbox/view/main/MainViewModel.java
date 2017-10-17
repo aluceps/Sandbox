@@ -16,6 +16,8 @@ public class MainViewModel extends RecyclerView.ViewHolder {
 
     public String catchcopy;
 
+    public boolean showCatchCopy;
+
     public Spanned description;
 
     public MainViewModel(View itemView) {
@@ -26,6 +28,7 @@ public class MainViewModel extends RecyclerView.ViewHolder {
     public void set(ConnpassEvent.Event model) {
         title = model.getTitle();
         catchcopy = model.getCatchcopy();
+        showCatchCopy = !model.getCatchcopy().isEmpty();
         description = Html.fromHtml(model.getDescription(), Html.FROM_HTML_MODE_LEGACY);
         binding.setEvent(this);
     }

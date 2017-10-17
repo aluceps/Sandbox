@@ -14,10 +14,16 @@ public class MainContract {
         MainAdapter getAdapter();
 
         void setEvents(List<ConnpassEvent.Event> events);
+
+        void clear();
+
+        void showProgressBar(boolean isRefresh);
+
+        void hideProgressBar(boolean isRefresh);
     }
 
     interface Presenter<T extends BaseView> extends BasePresenter<T> {
 
-        void load();
+        void load(boolean isRefresh);
     }
 }
