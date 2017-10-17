@@ -1,4 +1,4 @@
-package me.aluceps.sandbox.view;
+package me.aluceps.sandbox.view.main;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
