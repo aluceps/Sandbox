@@ -10,6 +10,9 @@ public interface ConnpassApi {
     String END_POINT = "https://connpass.com/api/v1/";
 
     @GET("event/")
+    Single<ConnpassEvent> events();
+
+    @GET("event/")
     Single<ConnpassEvent> event(
             @Query("event_id") long eventId
     );

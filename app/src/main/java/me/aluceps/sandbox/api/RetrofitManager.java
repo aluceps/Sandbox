@@ -36,7 +36,7 @@ public class RetrofitManager {
                 .build();
     }
 
-    public Single<ConnpassEvent> event(long id) {
-        return retrofit.create(ConnpassApi.class).event(id);
+    public Single<ConnpassEvent> events() {
+        return retrofit.create(ConnpassApi.class).events();
     }
 }
