@@ -9,7 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import me.aluceps.sandbox.api.RetrofitManager;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.repository.ConnpassRepository;
 import timber.log.Timber;
@@ -17,8 +16,6 @@ import timber.log.Timber;
 public class MainPresenter implements MainContract.Presenter<MainContract.View> {
 
     private MainContract.View view;
-
-    private RetrofitManager retrofitManager;
 
     private ConnpassRepository repository;
 
@@ -39,8 +36,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
     @Override
     public void load(final boolean isRefresh) {
         view.showProgressBar(isRefresh);
-        retrofitManager = new RetrofitManager();
-        retrofitManager.events()
+        repository.events()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<ConnpassEvent>() {

@@ -49,7 +49,10 @@
                 tools:text="コピー"
                 />
 
-            <View style="@style/divider"/>
+            <View
+                style="@style/divider"
+                android:visibility="@{event.showCatchCopy ? View.VISIBLE : View.GONE}"
+                />
 
             <TextView
                 android:layout_width="match_parent"
