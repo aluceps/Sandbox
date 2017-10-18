@@ -43,6 +43,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                         Timber.d("onSubscribe");
+                        disposable.add(d);
                         view.clear();
                     }
 
@@ -58,5 +59,13 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
                         Timber.d("onError");
                     }
                 });
+    }
+
+    @Override
+    public void destroy() {
+        if (disposable != null && !disposable.isDisposed()) {
+            Timber.d("dispose");
+            disposable.dispose();
+        }
     }
 }

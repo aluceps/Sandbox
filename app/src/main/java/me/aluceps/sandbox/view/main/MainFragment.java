@@ -52,6 +52,7 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void onDestroy() {
+        presenter.destroy();
         super.onDestroy();
     }
 

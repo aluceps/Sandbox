@@ -25,5 +25,7 @@ public class MainContract {
     interface Presenter<T extends BaseView> extends BasePresenter<T> {
 
         void load(boolean isRefresh);
+
+        void destroy();
     }
 }
