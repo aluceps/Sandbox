@@ -17,14 +17,20 @@ public class MainContract {
 
         void clear();
 
-        void showProgressBar(boolean isRefresh);
+        void showProgressBar();
 
-        void hideProgressBar(boolean isRefresh);
+        void hideProgressBar();
+
+        boolean isLoadPoint();
     }
 
     interface Presenter<T extends BaseView> extends BasePresenter<T> {
 
-        void load(boolean isRefresh);
+        void load();
+
+        boolean isLoading();
+
+        void refresh();
 
         void destroy();
     }

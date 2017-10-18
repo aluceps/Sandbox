@@ -2,12 +2,10 @@ package me.aluceps.sandbox.view.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import javax.inject.Inject;
 import me.aluceps.sandbox.R;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
+import me.aluceps.sandbox.model.RequestParams;
 import me.aluceps.sandbox.view.BaseFragment;
 
 public class MainFragment extends BaseFragment implements MainContract.View {
@@ -51,7 +50,7 @@ public class MainFragment extends BaseFragment implements MainContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeRecyclerView();
-        presenter.load(false);
+        presenter.load();
     }
 
     @Override
@@ -69,11 +68,20 @@ public class MainFragment extends BaseFragment implements MainContract.View {
     @Override
     public void initializeRecyclerView() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!presenter.isLoading() && isLoadPoint()) {
+                    presenter.load();
+                }
+            }
+        });
         binding.recyclerView.setAdapter(getAdapter());
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.load(true);
+                presenter.refresh();
             }
         });
     }
@@ -86,7 +94,11 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void setEvents(List<ConnpassEvent.Event> events) {
-        adapter.set(events);
+        if (events.size() > 0) {
+            adapter.set(events);
+        } else {
+            adapter.clear();
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -97,19 +109,22 @@ public class MainFragment extends BaseFragment implements MainContract.View {
     }
 
     @Override
-    public void showProgressBar(boolean isRefresh) {
-        if (!isRefresh) {
-            binding.progressbar.setVisibility(View.VISIBLE);
-        }
+    public void showProgressBar() {
+        binding.progressbar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void hideProgressBar(boolean isRefresh) {
-        if (isRefresh) {
-            binding.swiperefresh.setRefreshing(false);
-        } else {
-            binding.progressbar.setVisibility(View.GONE);
-        }
+    public void hideProgressBar() {
+        binding.progressbar.setVisibility(View.GONE);
+        binding.swiperefresh.setRefreshing(false);
+    }
+
+    @Override
+    public boolean isLoadPoint() {
+        int current = binding.recyclerView.getChildCount();
+        int total = binding.recyclerView.getLayoutManager().getItemCount();
+        int first = ((LinearLayoutManager) binding.recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        return total > 0 && (total - current - RequestParams.LIMIT) <= first;
     }
 
     @Override
@@ -119,12 +134,10 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void connectedBehavior() {
-        Snackbar.make(binding.getRoot(), "通信可能です", BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 
     @Override
     public void disconnecteBehavior() {
-        Snackbar.make(binding.getRoot(), "通信不可です", BaseTransientBottomBar.LENGTH_SHORT).show();
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.network_error_title)
                 .setMessage(R.string.network_error_message)

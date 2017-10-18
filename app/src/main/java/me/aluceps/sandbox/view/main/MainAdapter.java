@@ -35,7 +35,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainViewModel> {
     }
 
     public void set(List<ConnpassEvent.Event> events) {
-        this.events.addAll(events);
+        for (ConnpassEvent.Event e : events) {
+            this.events.add(e);
+        }
     }
 
     public void clear() {
