@@ -2,7 +2,11 @@ package me.aluceps.sandbox.view.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.aluceps.sandbox.R;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.view.BaseFragment;
@@ -105,5 +110,25 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         } else {
             binding.progressbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean checkConnectionState() {
+        return super.checkConnectionState();
+    }
+
+    @Override
+    public void connectedBehavior() {
+        Snackbar.make(binding.getRoot(), "通信可能です", BaseTransientBottomBar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void disconnecteBehavior() {
+        Snackbar.make(binding.getRoot(), "通信不可です", BaseTransientBottomBar.LENGTH_SHORT).show();
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.network_error_title)
+                .setMessage(R.string.network_error_message)
+                .setPositiveButton(R.string.network_error_positive, null)
+                .show();
     }
 }

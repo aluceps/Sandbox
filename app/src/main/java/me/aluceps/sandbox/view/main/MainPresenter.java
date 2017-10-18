@@ -34,6 +34,10 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
 
     @Override
     public void load(final boolean isRefresh) {
+        if (!view.checkConnectionState()) {
+            view.hideProgressBar(isRefresh);
+            return;
+        }
         view.showProgressBar(isRefresh);
         repository.events()
                 .subscribeOn(Schedulers.io())

@@ -2,6 +2,7 @@ package me.aluceps.sandbox.di;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +36,12 @@ public class AppModule {
     @Provides
     public CompositeDisposable provideCompositeDisposable() {
         return new CompositeDisposable();
+    }
+
+    @Provides
+    @Singleton
+    public ConnectivityManager provideConnectivityManager() {
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     @Provides
