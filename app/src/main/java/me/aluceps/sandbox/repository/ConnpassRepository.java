@@ -4,21 +4,21 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Single;
-import me.aluceps.sandbox.api.service.ConnpassService;
+import me.aluceps.sandbox.api.ConnpassClient;
 import me.aluceps.sandbox.model.ConnpassEvent;
 
 @Singleton
 public class ConnpassRepository implements ConnpassRemoteDataSource {
 
-    private ConnpassService service;
+    private final ConnpassClient client;
 
     @Inject
-    public ConnpassRepository(ConnpassService service) {
-        this.service = service;
+    public ConnpassRepository(ConnpassClient client) {
+        this.client = client;
     }
 
     @Override
     public Single<ConnpassEvent> events() {
-        return service.events();
+        return client.events();
     }
 }

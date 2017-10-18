@@ -2,7 +2,11 @@ package me.aluceps.sandbox.view.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +16,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.aluceps.sandbox.R;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.view.BaseFragment;
-import timber.log.Timber;
 
 public class MainFragment extends BaseFragment implements MainContract.View {
 
@@ -58,14 +62,12 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void initializePresenter() {
-        Timber.d("initializePresenter");
         getComponent().inject(this);
         presenter.setView(this);
     }
 
     @Override
     public void initializeRecyclerView() {
-        Timber.d("initializeRecyclerView");
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(getAdapter());
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -78,14 +80,12 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public MainAdapter getAdapter() {
-        Timber.d("getAdapter");
         adapter = new MainAdapter();
         return adapter;
     }
 
     @Override
     public void setEvents(List<ConnpassEvent.Event> events) {
-        Timber.d("setEvents");
         adapter.set(events);
         adapter.notifyDataSetChanged();
     }
@@ -110,5 +110,25 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         } else {
             binding.progressbar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean checkConnectionState() {
+        return super.checkConnectionState();
+    }
+
+    @Override
+    public void connectedBehavior() {
+        Snackbar.make(binding.getRoot(), "通信可能です", BaseTransientBottomBar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void disconnecteBehavior() {
+        Snackbar.make(binding.getRoot(), "通信不可です", BaseTransientBottomBar.LENGTH_SHORT).show();
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.network_error_title)
+                .setMessage(R.string.network_error_message)
+                .setPositiveButton(R.string.network_error_positive, null)
+                .show();
     }
 }

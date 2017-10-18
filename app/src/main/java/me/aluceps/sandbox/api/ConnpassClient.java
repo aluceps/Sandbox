@@ -17,7 +17,7 @@ public class ConnpassClient {
         this.connpassService = connpassService;
     }
 
-    public Single<ConnpassEvent> users() {
+    public Single<ConnpassEvent> events() {
         return connpassService.events();
     }
 }

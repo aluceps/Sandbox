@@ -7,6 +7,7 @@ ConnpassのAPIからイベント情報を取得して表示するだけの機能
 - Dagger2 and Gson - Google
 - RxJava2 and RxAndroid2 - ReactiveX
 - Timber - JakeWharton
+- Stetho - Facebook
 
 ## Reference to
 - [Architecting Android...The clean way?](https://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/)

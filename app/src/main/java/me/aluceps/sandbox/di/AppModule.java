@@ -2,6 +2,7 @@ package me.aluceps.sandbox.di;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,9 +13,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
 import me.aluceps.sandbox.BuildConfig;
-import me.aluceps.sandbox.api.RequestInterceptor;
 import me.aluceps.sandbox.api.service.ConnpassService;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -41,8 +40,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Interceptor provideRequestInterceptor(RequestInterceptor interceptor) {
-        return interceptor;
+    public ConnectivityManager provideConnectivityManager() {
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     @Provides

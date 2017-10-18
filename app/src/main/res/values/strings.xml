@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sandbox</string>
+
+    <string name="network_error_positive">OK</string>
+    <string name="network_error_title">通信エラー</string>
+    <string name="network_error_message">ネットワークの接続を確認してから再度お試しください</string>
 </resources>
