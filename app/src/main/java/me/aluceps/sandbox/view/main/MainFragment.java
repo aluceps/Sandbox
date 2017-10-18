@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.view.BaseFragment;
-import timber.log.Timber;
 
 public class MainFragment extends BaseFragment implements MainContract.View {
 
@@ -58,14 +57,12 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void initializePresenter() {
-        Timber.d("initializePresenter");
         getComponent().inject(this);
         presenter.setView(this);
     }
 
     @Override
     public void initializeRecyclerView() {
-        Timber.d("initializeRecyclerView");
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(getAdapter());
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -78,14 +75,12 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public MainAdapter getAdapter() {
-        Timber.d("getAdapter");
         adapter = new MainAdapter();
         return adapter;
     }
 
     @Override
     public void setEvents(List<ConnpassEvent.Event> events) {
-        Timber.d("setEvents");
         adapter.set(events);
         adapter.notifyDataSetChanged();
     }

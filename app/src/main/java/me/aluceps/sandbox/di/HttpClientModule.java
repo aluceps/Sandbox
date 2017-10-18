@@ -21,7 +21,7 @@ public class HttpClientModule {
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient(Context context, Interceptor interceptor) {
+    public OkHttpClient provideHttpClient(Context context, Interceptor interceptor) {
         File cacheDir = new File(context.getCacheDir(), CACHE_FILE_NAME);
         Cache cache = new Cache(cacheDir, MAX_CACHE_SIZE);
 

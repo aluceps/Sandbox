@@ -37,7 +37,10 @@
                 tools:text="テストタイトル"
                 />
 
-            <View style="@style/divider"/>
+            <View
+                style="@style/divider"
+                android:visibility="@{event.showCatchCopy ? View.VISIBLE : View.GONE}"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,21 +51,6 @@
                 android:visibility="@{event.showCatchCopy ? View.VISIBLE : View.GONE}"
                 tools:text="コピー"
                 />
-
-            <View
-                style="@style/divider"
-                android:visibility="@{event.showCatchCopy ? View.VISIBLE : View.GONE}"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="@{event.description}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="本文"
-                />
-
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

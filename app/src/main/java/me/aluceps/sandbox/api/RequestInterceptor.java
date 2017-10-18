@@ -1,6 +1,7 @@
 package me.aluceps.sandbox.api;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import java.io.IOException;
 
@@ -16,14 +17,17 @@ public class RequestInterceptor implements Interceptor {
 
     final Context context;
 
+    final ConnectivityManager connectivityManager;
+
     @Inject
-    public RequestInterceptor(Context context) {
+    public RequestInterceptor(Context context, ConnectivityManager connectivityManager) {
         this.context = context;
+        this.connectivityManager = connectivityManager;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request.Builder reqest = chain.request().newBuilder();
-        return chain.proceed(reqest.build());
+        Request.Builder request = chain.request().newBuilder();
+        return chain.proceed(request.build());
     }
 }
