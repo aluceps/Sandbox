@@ -23,8 +23,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initializeInjector();
-        initializeTimber();
-        initializeStetho();
+        initializeDebugUtilities();
     }
 
     private void initializeInjector() {
@@ -34,14 +33,9 @@ public class MyApplication extends Application {
         appComponent.inject(this);
     }
 
-    private void initializeTimber() {
+    private void initializeDebugUtilities() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        }
-    }
-
-    private void initializeStetho() {
-        if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
     }
