@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
 import me.aluceps.sandbox.view.BaseFragment;
@@ -19,7 +21,8 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     private FragmentMainBinding binding;
 
-    private MainPresenter presenter;
+    @Inject
+    MainPresenter presenter;
 
     private MainAdapter adapter;
 
@@ -49,13 +52,14 @@ public class MainFragment extends BaseFragment implements MainContract.View {
 
     @Override
     public void onDestroy() {
+        presenter.destroy();
         super.onDestroy();
     }
 
     @Override
     public void initializePresenter() {
         Timber.d("initializePresenter");
-        presenter = new MainPresenter();
+        getComponent().inject(this);
         presenter.setView(this);
     }
 
