@@ -42,6 +42,8 @@ dependencies {
     // Utility
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
     // Network
     compile 'com.squareup.okhttp3:okhttp:3.9.0'

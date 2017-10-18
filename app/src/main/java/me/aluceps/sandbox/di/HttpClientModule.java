@@ -2,6 +2,8 @@ package me.aluceps.sandbox.di;
 
 import android.content.Context;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -35,6 +37,7 @@ public class HttpClientModule {
                 .addInterceptor(createInterceptor());
 
         if (BuildConfig.DEBUG) {
+            client.addNetworkInterceptor(new StethoInterceptor());
             client.addNetworkInterceptor(new HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY));
         }
