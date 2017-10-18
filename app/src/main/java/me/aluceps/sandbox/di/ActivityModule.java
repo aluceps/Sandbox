@@ -8,7 +8,7 @@ import dagger.Provides;
 @Module
 public class ActivityModule {
 
-    final AppCompatActivity activity;
+    private final AppCompatActivity activity;
 
     public ActivityModule(AppCompatActivity activity) {
         this.activity = activity;

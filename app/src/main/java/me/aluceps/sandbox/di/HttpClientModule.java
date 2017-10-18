@@ -22,9 +22,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 @Module
 public class HttpClientModule {
 
-    static final String CACHE_FILE_NAME = "okhttp.cache";
+    private static final String CACHE_FILE_NAME = "okhttp.cache";
 
-    static final long MAX_CACHE_SIZE = 5 * 1024 * 1024;
+    private static final long MAX_CACHE_SIZE = 5 * 1024 * 1024;
 
     @Provides
     @Singleton
