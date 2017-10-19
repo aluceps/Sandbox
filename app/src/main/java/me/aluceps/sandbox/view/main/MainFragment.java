@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import me.aluceps.sandbox.R;
 import me.aluceps.sandbox.databinding.FragmentMainBinding;
 import me.aluceps.sandbox.model.ConnpassEvent;
-import me.aluceps.sandbox.model.RequestParams;
 import me.aluceps.sandbox.view.BaseFragment;
 
 public class MainFragment extends BaseFragment implements MainContract.View {
@@ -72,7 +71,8 @@ public class MainFragment extends BaseFragment implements MainContract.View {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (!presenter.isLoading() && isLoadPoint()) {
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (!presenter.isLoading() && isLastPosition(manager)) {
                     presenter.load();
                 }
             }
@@ -81,7 +81,24 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.refresh();
+                if (presenter.isLoading()) {
+                    binding.swiperefresh.setRefreshing(false);
+                } else {
+                    presenter.refresh();
+                }
+            }
+        });
+    }
+
+    private boolean isLastPosition(LinearLayoutManager manager) {
+        return manager.findLastVisibleItemPosition() >= manager.getItemCount() - 1;
+    }
+
+    private void notifyDataSetChanged() {
+        binding.recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -99,32 +116,26 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         } else {
             adapter.clear();
         }
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override
     public void clear() {
         adapter.clear();
-        adapter.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override
     public void showProgressBar() {
-        binding.progressbar.setVisibility(View.VISIBLE);
+        adapter.setLoading();
+        notifyDataSetChanged();
     }
 
     @Override
     public void hideProgressBar() {
-        binding.progressbar.setVisibility(View.GONE);
         binding.swiperefresh.setRefreshing(false);
-    }
-
-    @Override
-    public boolean isLoadPoint() {
-        int current = binding.recyclerView.getChildCount();
-        int total = binding.recyclerView.getLayoutManager().getItemCount();
-        int first = ((LinearLayoutManager) binding.recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-        return total > 0 && (total - current - RequestParams.LIMIT) <= first;
+        adapter.removeLoading();
+        notifyDataSetChanged();
     }
 
     @Override
