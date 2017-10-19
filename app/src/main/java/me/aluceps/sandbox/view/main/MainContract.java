@@ -20,8 +20,6 @@ public class MainContract {
         void showProgressBar();
 
         void hideProgressBar();
-
-        boolean isLoadPoint();
     }
 
     interface Presenter<T extends BaseView> extends BasePresenter<T> {

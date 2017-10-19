@@ -45,12 +45,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
 
     @Override
     public void load() {
-        if (!view.checkConnectionState()) {
-            view.hideProgressBar();
-            return;
-        }
         if (!loading && requestParams.getTotal() > requestParams.getOffset()) {
-            view.showProgressBar();
             repository.events(requestParams)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +53,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
                         @Override
                         public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
                             disposable.add(d);
+                            view.showProgressBar();
                             loading = true;
                         }
 
@@ -72,6 +68,7 @@ public class MainPresenter implements MainContract.Presenter<MainContract.View> 
 
                         @Override
                         public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                            view.hideProgressBar();
                             loading = false;
                         }
                     });
