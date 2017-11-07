@@ -9,7 +9,8 @@ data class ConnpassEvent(
         @SerializedName("results_start")
         val resultsStart: Int = 0,
         @SerializedName("results_available")
-        val resultsAvailable: Int = 0) {
+        val resultsAvailable: Int = 0
+) {
 
     data class Event(
             @SerializedName("event_url")
