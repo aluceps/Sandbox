@@ -11,5 +11,6 @@ import javax.inject.Singleton
 class ConnpassRepository @Inject
 constructor(private val client: ConnpassClient) : ConnpassRemoteDataSource {
 
-    override fun events(params: RequestParams): Single<ConnpassEvent> = client.events(params)
+    override fun events(params: RequestParams): Single<ConnpassEvent> =
+            client.events(params)
 }

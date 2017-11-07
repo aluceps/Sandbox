@@ -8,8 +8,5 @@ import retrofit2.http.Query
 interface ConnpassService {
 
     @GET("event/")
-    fun events(
-            @Query("start") start: Int,
-            @Query("count") count: Int
-    ): Single<ConnpassEvent>
+    fun events(@Query("start") start: Int, @Query("count") count: Int): Single<ConnpassEvent>
 }
