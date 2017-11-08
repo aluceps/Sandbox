@@ -8,7 +8,7 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(AppModule::class, HttpClientModule::class))
 interface AppComponent {
 
-    operator fun plus(module: ActivityModule): ActivityComponent
+    fun plus(module: ActivityModule): ActivityComponent
 
     fun inject(application: MyApplication)
 }

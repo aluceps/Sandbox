@@ -36,9 +36,9 @@ class HttpClientModule {
 
     companion object {
 
-        private val CACHE_FILE_NAME = "okhttp.cache"
+        const val CACHE_FILE_NAME = "okhttp.cache"
 
-        private val MAX_CACHE_SIZE = (5 * 1024 * 1024).toLong()
+        const val MAX_CACHE_SIZE = (5 * 1024 * 1024).toLong()
 
         private fun createInterceptor(): Interceptor = Interceptor { chain ->
             val request = chain.request().newBuilder()
