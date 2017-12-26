@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // Kotlin
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.10'
     kapt 'com.android.databinding:compiler:3.0.1'
 
     // Structure
