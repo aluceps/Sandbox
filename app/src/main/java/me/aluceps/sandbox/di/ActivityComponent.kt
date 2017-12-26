@@ -5,7 +5,7 @@ import me.aluceps.sandbox.di.scope.ActivityScope
 import me.aluceps.sandbox.view.main.MainActivity
 
 @ActivityScope
-@Subcomponent(modules = arrayOf(ActivityModule::class))
+@Subcomponent(modules = [(ActivityModule::class)])
 interface ActivityComponent {
 
     fun plus(module: FragmentModule): FragmentComponent
