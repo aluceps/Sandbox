@@ -9,7 +9,7 @@ class MainContract {
 
         fun initializeRecyclerView()
 
-        fun setEvents(events: List<ConnpassEvent.Event>)
+        fun setData(data: List<ConnpassEvent.Event>)
 
         fun clear()
 

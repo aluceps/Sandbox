@@ -6,34 +6,34 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import me.aluceps.sandbox.R
 import me.aluceps.sandbox.model.ConnpassEvent
-import java.util.*
 
 class MainAdapter : RecyclerView.Adapter<MainViewModel>() {
 
-    private val events: List<ConnpassEvent.Event>
-
-    private val pairs: MutableList<Pair<Type, ConnpassEvent.Event>>
+    private val pairs: MutableList<Pair<Type, ConnpassEvent.Event?>> = mutableListOf()
 
     enum class Type(val id: Int) {
         PROGRESS(0),
         DATA(1)
     }
 
-    init {
-        events = ArrayList()
-        pairs = ArrayList()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewModel =
             when (viewType) {
-                Type.PROGRESS.id -> MainViewModel(LayoutInflater.from(parent.context).inflate(R.layout.cell_progress, parent, false))
-                Type.DATA.id -> MainViewModel(LayoutInflater.from(parent.context).inflate(R.layout.cell_event, parent, false))
-                else -> MainViewModel(LayoutInflater.from(parent.context).inflate(R.layout.cell_event, parent, false))
+                Type.PROGRESS.id ->
+                    MainViewModel(LayoutInflater.from(parent.context).inflate(R.layout.cell_progress, parent, false))
+                else ->
+                    MainViewModel(LayoutInflater.from(parent.context).inflate(R.layout.cell_event, parent, false))
             }
 
     override fun onBindViewHolder(holder: MainViewModel, position: Int) {
-        holder.set(pairs[position].first, pairs[position].second)
-        holder.binding.executePendingBindings()
+        val pair = pairs[position]
+        when (pair.first) {
+            Type.PROGRESS -> {
+            }
+            else -> {
+                holder.set(pair.first!!, pair.second!!)
+                holder.binding.executePendingBindings()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -46,7 +46,7 @@ class MainAdapter : RecyclerView.Adapter<MainViewModel>() {
     }
 
     fun set(events: List<ConnpassEvent.Event>) {
-        events.mapTo(pairs) { Pair(Type.DATA, it) }
+        events.forEach { pairs.add(Pair(Type.DATA, it)) }
     }
 
     fun clear() {
@@ -54,7 +54,7 @@ class MainAdapter : RecyclerView.Adapter<MainViewModel>() {
     }
 
     fun setLoading() {
-        pairs.add(Pair(Type.PROGRESS, ConnpassEvent.Event()))
+        pairs.add(Pair(Type.PROGRESS, null))
     }
 
     fun removeLoading() {
