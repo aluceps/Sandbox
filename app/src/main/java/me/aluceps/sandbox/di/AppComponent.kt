@@ -5,7 +5,7 @@ import me.aluceps.sandbox.MyApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class, HttpClientModule::class))
+@Component(modules = [(AppModule::class), (HttpClientModule::class)])
 interface AppComponent {
 
     fun plus(module: ActivityModule): ActivityComponent
