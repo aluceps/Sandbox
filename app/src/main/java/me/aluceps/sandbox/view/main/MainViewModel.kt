@@ -12,9 +12,7 @@ import me.aluceps.sandbox.model.ConnpassEvent
 
 class MainViewModel(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    val binding by lazy {
-        DataBindingUtil.bind<ViewDataBinding>(itemView)
-    }
+    val binding: ViewDataBinding = DataBindingUtil.bind(itemView)
 
     var title: String? = null
 

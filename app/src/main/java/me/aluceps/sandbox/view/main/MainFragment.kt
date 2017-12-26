@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class MainFragment : BaseFragment(), MainContract.View {
 
-    lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
 
     @Inject
     lateinit var presenter: MainPresenter
@@ -24,12 +24,16 @@ class MainFragment : BaseFragment(), MainContract.View {
         MainAdapter()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentMainBinding.inflate(inflater!!, container, false)
+    companion object {
+        fun newInstance(): MainFragment = MainFragment()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeRecyclerView()
         presenter.load()
@@ -46,22 +50,24 @@ class MainFragment : BaseFragment(), MainContract.View {
     }
 
     override fun initializeRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val manager = recyclerView!!.layoutManager as LinearLayoutManager
-                if (!presenter.isLoading() && isLastPosition(manager)) {
-                    presenter.load()
+        binding.run {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = adapter
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val manager = recyclerView!!.layoutManager as LinearLayoutManager
+                    if (!presenter.isLoading() && isLastPosition(manager)) {
+                        presenter.load()
+                    }
                 }
-            }
-        })
-        binding.recyclerView.adapter = adapter
-        binding.swiperefresh.setOnRefreshListener {
-            if (presenter.isLoading()) {
-                binding.swiperefresh.isRefreshing = false
-            } else {
-                presenter.refresh()
+            })
+            swiperefresh.setOnRefreshListener {
+                if (presenter.isLoading()) {
+                    swiperefresh.isRefreshing = false
+                } else {
+                    presenter.refresh()
+                }
             }
         }
     }
@@ -74,9 +80,9 @@ class MainFragment : BaseFragment(), MainContract.View {
         binding.recyclerView.post { adapter.notifyDataSetChanged() }
     }
 
-    override fun setEvents(events: List<ConnpassEvent.Event>) {
-        if (events.isNotEmpty()) {
-            adapter.set(events)
+    override fun setData(data: List<ConnpassEvent.Event>) {
+        if (data.isNotEmpty()) {
+            adapter.set(data)
         } else {
             adapter.clear()
         }
@@ -106,17 +112,12 @@ class MainFragment : BaseFragment(), MainContract.View {
     override fun connectedBehavior() {}
 
     override fun disconnecteBehavior() {
-        AlertDialog.Builder(activity)
-                .setTitle(R.string.network_error_title)
-                .setMessage(R.string.network_error_message)
-                .setPositiveButton(R.string.network_error_positive, null)
-                .show()
-    }
-
-    companion object {
-
-        fun newInstance(): MainFragment {
-            return MainFragment()
+        activity?.let {
+            AlertDialog.Builder(it)
+                    .setTitle(R.string.network_error_title)
+                    .setMessage(R.string.network_error_message)
+                    .setPositiveButton(R.string.network_error_positive, null)
+                    .show()
         }
     }
 }

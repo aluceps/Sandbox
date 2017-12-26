@@ -6,6 +6,6 @@ data class RequestParams(
         var limit: Int = 0
 ) {
     companion object {
-        const val LIMIT = 10
+        const val LIMIT = 50
     }
 }

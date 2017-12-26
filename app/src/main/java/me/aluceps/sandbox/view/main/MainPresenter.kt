@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class MainPresenter @Inject
 constructor(private val repository: ConnpassRepository,
-            private val disposable: CompositeDisposable?) : MainContract.Presenter<MainContract.View> {
+            private val disposable: CompositeDisposable) : MainContract.Presenter<MainContract.View> {
 
     private lateinit var view: MainContract.View
 
@@ -31,20 +31,23 @@ constructor(private val repository: ConnpassRepository,
     }
 
     override fun load() {
+        view.showProgressBar()
         if (!loading && requestParams.total > requestParams.offset) {
             repository.events(requestParams)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : SingleObserver<ConnpassEvent> {
                         override fun onSubscribe(@io.reactivex.annotations.NonNull d: Disposable) {
-                            disposable!!.add(d)
-                            view.showProgressBar()
+                            disposable.add(d)
                             loading = true
                         }
 
                         override fun onSuccess(@io.reactivex.annotations.NonNull connpassEvent: ConnpassEvent) {
                             view.hideProgressBar()
-                            view.setEvents(connpassEvent.events!!)
+                            view.clear()
+                            connpassEvent.events?.let {
+                                view.setData(it)
+                            }
                             requestParams.offset = connpassEvent.resultsStart + connpassEvent.resultsReturned
                             requestParams.total = connpassEvent.resultsAvailable
                             loading = false
